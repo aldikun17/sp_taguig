@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Model\Document as document;
 
+use App\Model\document_tracking as document_tracking;
+
 class request_document extends Model
 {
     
@@ -23,10 +25,24 @@ class request_document extends Model
 
 	protected $hidden = [ 'id' ];
 
-	public function document()
+	public function documents()
 	{
 
 		return $this->hasMany( document::class , 'document_no' , 'document_no');
+
+	}
+
+	public function document_tracking()
+	{
+
+		return $this->belongsTo( document_tracking::class, 'request_no', 'request_no' );
+
+	}
+
+	public function document_trackings()
+	{
+
+		return $this->belongsTo( document_tracking::class, 'request_no', 'request_no' );
 
 	}
     

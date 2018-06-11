@@ -25,6 +25,8 @@ class ReceiverMiddleware
             if(Auth::user()->user_level != 2)
             {
 
+                return back();
+
             }
 
 

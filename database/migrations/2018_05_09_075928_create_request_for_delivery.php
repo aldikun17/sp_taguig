@@ -15,8 +15,8 @@ class CreateRequestForDelivery extends Migration
     {
         Schema::create('request_documents',function(Blueprint $table){
             $table->increments('id');
-            $table->string('request_no',16);
-            $table->string('document_no',16);
+            $table->string('request_no',20);
+            $table->string('document_no',20);
             $table->string('receiver',64);
             $table->boolean('status');
             $table->boolean('soft_delete');

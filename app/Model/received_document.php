@@ -13,11 +13,13 @@ class received_document extends Model
 
 	protected $fillable	= [
 
-		'tracking',
+		'tracking_id',
 
 		'count_tracking',
 
 		'person_received',
+
+		'reason_requesting',
 
 		'status'
 
@@ -32,10 +34,10 @@ class received_document extends Model
 
 	}
 
-	public function tracking_document()
+	public function document_trackings()
 	{
 
-		return $this->belongsTo( document_tracking::class, 'tracking_id', 'tracking_id');
+		return $this->belongsTo( document_tracking::class, 'tracking_id' , 'tracking_id' );
 
 	}
 

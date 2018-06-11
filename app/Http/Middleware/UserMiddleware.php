@@ -22,8 +22,10 @@ class UserMiddleware
         if(Auth::check())
         {
 
-            if(Auth::user()->user_level != 4)
+            if(Auth::user()->user_level != 3)
             {
+
+                return back();
 
             }
 

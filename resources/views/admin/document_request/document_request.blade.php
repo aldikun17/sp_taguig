@@ -1,12 +1,6 @@
 @extends('admin.extends')
 @section('title','Request Document')
 @section('content')
-<?php
-	use App\Model\request_document as request_document;
-	use App\Model\document as document;
-	use App\Model\category_document as category_document;
-?>
-
 
 <section class="content-header">
     <h1>
@@ -202,27 +196,18 @@
 							      		<div class="form-group">
 							      		
 							      			<ul class="list list-unstyled">
-							      				
-							      				<?php
 
-							      					$to_request_sorted = request_document::where('request_no',$request->request_no)->groupBy('request_no')->first();
+							      				@foreach($request::where('request_no',$request->request_no)->groupBy('request_no')->first()->documents as $document_categories)
 
-							      					$document_categories = $to_request_sorted::find($to_request_sorted->id)->document;
-
-							      					$to_request = request_document::where('request_no',$request->request_no)->get();
-
-							      				?>
-
-							      				@foreach($document_categories as $category)
-
-							      					<li> <label> Document Category </label> </li>
+							      				<li> <label> Document Category </label> </li>
 
 							      					<li style="margin-bottom:15px;">
 							      						<select class="form-control">
 							      							
 							      							<option>
 
-							      								{{$category::find($category->id)->category_documents->document_category}}
+							      								{{$document_categories->category_documents->document_category}}
+							      								
 
 							      							</option>
 
@@ -232,11 +217,9 @@
 
 							      				@endforeach
 
-							      				@foreach($to_request as $request_document)
+							      				@foreach($request::where('request_no',$request->request_no)->get() as $documents)
 
-							      					<?php $to_approved = $request_document::find($request_document->id)->document; ?>
-
-							      					@foreach($to_approved as $document_approved)
+							      					@foreach($documents::find($documents->id)->documents as $document_approved)
 
 							      					<li> <label> Document Requested </label> </li>
 
@@ -246,9 +229,13 @@
 
 							      					</li>
 
+
 							      					@endforeach
 
+
 							      				@endforeach
+
+
 
 							      			</ul>
 
@@ -477,11 +464,6 @@
 
 			            </div>
 			        	
-			        </div>
-
-			        <div class="form-group">
-			        	
-
 			        </div>
 
 		      </div>

@@ -10,6 +10,8 @@ use App\Model\Category_Document as category_document;
 
 use App\Model\document_tracking as document_tracking;
 
+use App\Model\received_document as received_document;
+
 use Response;
 
 class ReceiverViewController extends Controller
@@ -18,7 +20,10 @@ class ReceiverViewController extends Controller
 	public function receiver_dashboard()
 	{
 
-		return view('receiver.receiver_dashboard');
+		$received_documents = received_document::where('status',1)->groupBy('tracking_id')->get();
+
+
+		return view('receiver.receiver_dashboard' , compact( 'received_documents' ) );
 
 	}
 

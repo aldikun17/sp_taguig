@@ -15,7 +15,7 @@ class CreateCategoryDocument extends Migration
     {
         Schema::create('category_documents',function(Blueprint $table){
             $table->increments('id');
-            $table->string('document_no',16)->unique();
+            $table->string('document_no',20)->unique();
             $table->string('document_category');
             $table->boolean('soft_delete');
             $table->timestamps();

@@ -15,8 +15,8 @@ class CreateDocumentTracking extends Migration
     {
         Schema::create('document_trackings',function(Blueprint $table){
             $table->increments('id');
-            $table->string('tracking_id');
-            $table->string('request_no');
+            $table->string('tracking_id',20);
+            $table->string('request_no',20);
             $table->dateTime('date_received')->nullable();
             $table->boolean('confirmed');
             $table->timestamps();

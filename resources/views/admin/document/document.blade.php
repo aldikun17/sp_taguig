@@ -59,7 +59,7 @@
 
 					<tr>
 						
-						<th colspan="6"> <a  data-toggle="modal" data-target="#myDocuments" class="btn btn-primary pull-right"> Create Document </a> </th>
+						<th colspan="6"> <a  href="{{Route('document_create')}}" class="btn btn-primary pull-right"> Create Document </a> </th>
 
 					</tr>
 					

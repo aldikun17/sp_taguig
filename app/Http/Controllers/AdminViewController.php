@@ -12,15 +12,17 @@ use App\Model\Request_Document as request_document;
 
 use App\Model\document_tracking as document_tracking;
 
+use App\Model\received_document as received_document;
+
 class AdminViewController extends Controller
 {
     
 	public function admin_view()
 	{
 
-		$document_tracking  = document_tracking::orderBy('created_at');
+		$received_document  = received_document::where('status',1)->groupBy('tracking_id')->get();
 
-		return view('admin.dashboard', compact( 'document_tracking' ) );
+		return view('admin.dashboard', compact( 'received_document' ) );
 		
 	}
 
@@ -54,12 +56,22 @@ class AdminViewController extends Controller
 
 	}
 
+	public function create_document()
+	{
+
+		$category_document = category_document::all();
+
+		return view('admin.document.create_document.create_document', compact( 'category_document' ));
+
+
+	}
+
 	public function tracking_view()
 	{
 
-		$document = document::all();
+		$received_document = received_document::where('status',0)->get();
 
-		return view('admin.document_tracking.document_tracking' , compact( 'document' ) );
+		return view('admin.document_tracking.document_tracking' , compact( 'received_document' ) );
 
 	}
 

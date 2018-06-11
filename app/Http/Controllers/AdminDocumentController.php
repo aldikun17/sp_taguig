@@ -12,6 +12,8 @@ use Validator;
 
 use Response;
 
+use Storage;
+
 class AdminDocumentController extends Controller
 {
     
@@ -40,18 +42,16 @@ class AdminDocumentController extends Controller
 
 			'name'				   => 'required',
 
-			'document_content'	   => 'required'
+			'document_content'	   => 'required',
+
+			'document_name'		   => 'required|file'
 
 		]);
 
 		if($create_document_validator->fails())
 		{
 
-			return Response::json([
-
-				'errors' => $create_document_validator->errors()->all()
-
-			]);
+			return back()->withErrors($create_document_validator)->withInput();
 
 		}
 
@@ -69,28 +69,31 @@ class AdminDocumentController extends Controller
 	public function store_created_document($request)
 	{
 
-		$create_document = new Document;
+		$document_category = Category_Document::where('document_no',$request['document_category_id'])->first();
 
-		$create_document->document_category_id = $request['document_category_id'];
+		$document_path = storage_path('app/public').'\documents/'.$document_category->document_category.'/'.$request['document_no'].'/';
 
-		$create_document->document_no 		   = $request['document_no'];
+		$request['document_name']->move( $document_path , $request['document_name']->getClientOriginalName());
 
-		$create_document->office 			   = $request['office'];
+			$create_document = new Document;
 
-		$create_document->name 				   = $request['name'];
+			$create_document->document_category_id = $request['document_category_id'];
 
-		$create_document->soft_delete 		   = 1;
+			$create_document->document_no 		   = $request['document_no'];
 
-		$create_document->document_content 	   = $request['document_content'];
+			$create_document->office 			   = $request['office'];
 
-		$create_document->save();
+			$create_document->name 				   = $request['name'];
 
-		return Response::json([
+			$create_document->document_path		   = $request['document_name']->getClientOriginalName();
 
-			'success'	=> "You've Successfully Create A New Document"
+			$create_document->soft_delete 		   = 1;
 
-		]);
+			$create_document->document_content 	   = $request['document_content'];
 
+			$create_document->save();
+
+			return back()->with('document_create_success','Document Successfully Created');
 
 	}
 

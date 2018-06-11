@@ -109,7 +109,17 @@
 
 			                	@foreach($request_document as $update_request)
 
-			                		<li>{{$update_request->document_no}}</li> 
+			                		@foreach($update_request::find($update_request->id)->document as $document)
+
+			                			<li>
+			                				<object data="{{storage_path('documents').'/'.$document->category_documents->document_category.'/'.$update_request->document_no.'/'.$document->document_path}}" type="application/pdf" width="100%" height="100%">
+										  	<p> Your web browser doesn't have a PDF plugin.
+										  		Instead you can <a href="filename.pdf">click here to
+										  		download the PDF file.</a></p>
+											</object>
+										</li>
+
+			                		@endforeach
 
 			                	@endforeach
 

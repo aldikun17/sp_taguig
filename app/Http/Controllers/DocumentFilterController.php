@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Model\document as document;
 
+use App\Model\category_document as category_document;
+
 use Response;
 
 class DocumentFilterController extends Controller
@@ -78,8 +80,14 @@ class DocumentFilterController extends Controller
 
 		$document = document::where('document_category_id',$category_id)->get();
 
+		$document_category = category_document::where('document_no',$category_id)->first();
+
 		return Response::json([
+
+			'document_category' => $document_category,
+
 			'documents' => $document
+
 		]);
 
 	}

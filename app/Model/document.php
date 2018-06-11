@@ -4,6 +4,8 @@ namespace App\Model;
 
 use App\Model\category_document;
 
+use App\Model\request_document;
+
 use Illuminate\Database\Eloquent\Model;
 
 class document extends Model
@@ -32,7 +34,7 @@ class document extends Model
 	public function request_document()
 	{
 
-		return $this->belongsTo(\App\Model\request_document::class);
+		return $this->belongsTo(request_document::class, 'document_no' , 'document_no');
 
 	}
 

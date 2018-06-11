@@ -25,6 +25,8 @@ Route::get('/','WebController@index');
 
 	Route::get('filters/document/{id}/{document}/{office}/{date}','DocumentFilterController@filter_full');
 
+	Route::get('document/{file}','AdminDocumentController@document_download')->name('document/application');
+
 
 
 //End Filter
@@ -40,6 +42,8 @@ Route::middleware(['admin'])->group(function(){
 	Route::get('admin/document/category','AdminViewController@category_document_view')->name('category_document');
 
 	Route::get('admin/documents','AdminViewController@create_document_view')->name('create_document');
+
+	Route::get('admin/document/create','AdminViewController@create_document')->name('document_create');
 
 	Route::get('admin/request/document','AdminViewController@document_request')->name('document/request');
 
@@ -118,6 +122,12 @@ Route::middleware(['receiver'])->group(function(){
 
 		Route::get('receiver/documents/received','ReceiverViewController@documents_to_received')->name('receiver/documents/received');
 
+		Route::post('receiver/document/received/{id}','ReceiveRequestedDocumentController@receive_validate');
+
+		Route::get('receiver/approved/document/received/{request_no}/{count}','ReceiveRequestedDocumentController@approved_received');
+
+		Route::get('received/delete/document/received/{request_no}/{count}','ReceiveRequestedDocumentController@reject_received');
+
 	// end documents
 
 });
@@ -130,12 +140,11 @@ Route::middleware(['receiver'])->group(function(){
 
 Route::middleware(['user'])->group(function(){
 
-	Route::get('user/dashboard',function(){
+	Route::get('user/dashboard','user\UserViewController@dashboard')->name('user/dashboard');
 
-		
-		
-		
-	});
+	Route::get('user/documents','user\UserViewController@documents')->name('user/documents');
+
+	
 
 });
 

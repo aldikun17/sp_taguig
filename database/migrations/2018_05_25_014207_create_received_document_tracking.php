@@ -18,11 +18,17 @@ class CreateReceivedDocumentTracking extends Migration
 
             $table->increments('id');
 
-            $table->string('tracking_id',16);
+            $table->string('user_id',20)->nullable();
+
+            $table->string('tracking_id',20);
 
             $table->string('count_tracking',3);
 
             $table->string('person_received',32);
+
+            $table->string('reason_requesting',64);
+
+            $table->boolean('status');
 
             $table->timestamps();            
 

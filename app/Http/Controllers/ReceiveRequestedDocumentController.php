@@ -40,15 +40,24 @@ class ReceiveRequestedDocumentController extends Controller
 
 		}
 
-		if(!empty($request_no))
+		$check_document_tracking = document_tracking::where('request_no',$request_no)->first();
+
+		$approved_received_document = $check_document_tracking::find($check_document_tracking->id)->received_documents->last();
+
+		if(empty($approved_received_document))
 		{
 
-			return $this->update_tracking($request->all(),$request_no);
+			return $this->update_tracking($request->all(),$request_no);	
 			
+		}	else {
+
+			return $this->check_receive_count($request->all(),$request['tracking_id']);
 
 		}
 
-		return $this->check_receive_count($request->all(),$request['tracking_id']);
+			
+
+			
 
 	}
 
@@ -75,7 +84,23 @@ class ReceiveRequestedDocumentController extends Controller
 
 		$tracking_count = $tracking_id + 1;
 
-		if(empty($tracking_id)){	
+		if(!empty($tracking_id)){
+
+			$receive_document = new received_document;
+
+			$receive_document->tracking_id 		 = $request['tracking_id'];
+
+			$receive_document->count_tracking	 = $tracking_count;
+
+			$receive_document->person_received   = $request['person_received'];
+
+			$receive_document->reason_requesting = $request['reason_requesting'];
+
+			$receive_document->status 			 = 0;
+
+			$receive_document->save();
+
+		}	else {
 
 			$receive_document = new received_document;
 
@@ -92,22 +117,6 @@ class ReceiveRequestedDocumentController extends Controller
 			$receive_document->save();
 
 			
-
-		}	else {
-
-			$receive_document = new received_document;
-
-			$receive_document->tracking_id 		 = $request['tracking_id'];
-
-			$receive_document->count_tracking	 = $tracking_count;
-
-			$receive_document->person_received   = $request['person_received'];
-
-			$receive_document->reason_requesting = $request['reason_requesting'];
-
-			$receive_document->status 			 = 0;
-
-			$receive_document->save();
 
 		}
 
@@ -127,10 +136,30 @@ class ReceiveRequestedDocumentController extends Controller
 
 		foreach($received_document as $doc_req):
 
+			
 
 		endforeach;
 
 		return $this->received($request,$doc_req['count_tracking']);
+
+	}
+
+	public function approved_received($tracking,$count)
+	{
+
+		$document_tracking = document_tracking::where('request_no',$tracking)->first();
+
+		$received_document = received_document::where('tracking_id',$document_tracking->tracking_id)
+											  ->where('count_tracking',$count)->first();
+
+
+		$approved_received_document = received_document::find($received_document->id);
+
+		$approved_received_document->status = 1;
+
+		$approved_received_document->save();
+
+		return back()->with('approved_success','Document Received with tracking # of '. $received_document->tracking_id);
 
 	}
 
