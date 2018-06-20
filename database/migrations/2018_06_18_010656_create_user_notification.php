@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocumentTracking extends Migration
+class CreateUserNotification extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,24 @@ class CreateDocumentTracking extends Migration
      */
     public function up()
     {
-        Schema::create('document_trackings',function(Blueprint $table){
-            
+
+        Schema::create('user_notifications',function($table){
+
             $table->increments('id');
-            
+
+            $table->string('user_id',20)->nullable();
+
             $table->string('tracking_id',20);
-            
-            $table->string('request_no',20);
-            
-            $table->dateTime('date_received')->nullable();
-            
-            $table->boolean('confirmed');
-            
+
+            $table->string('message');
+
+            $table->boolean('status');
+
             $table->timestamps();
-        
+
+
         });
+
     }
 
     /**
@@ -37,6 +40,6 @@ class CreateDocumentTracking extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('document_trackings');
+        schema::dropIfExists('user_notifications');
     }
 }

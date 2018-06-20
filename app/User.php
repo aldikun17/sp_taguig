@@ -3,7 +3,12 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
+use App\Model\request_document as request_document;
+
+use App\Model\user_notification as user_notification;
 
 class User extends Authenticatable
 {
@@ -15,7 +20,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+
         'name', 'email', 'password',
+
     ];
 
     /**
@@ -24,6 +31,23 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+
         'password', 'remember_token',
+
     ];
+
+    public function MyRequest()
+    {
+
+        return $this->belongsTo( request_document::class, 'user_id' , 'user_id' );
+
+    }
+
+    public function myNotification()
+    {
+
+        return $this->hasMany( user_notification::class, 'user_id' , 'user_id' );
+
+    }
+
 }

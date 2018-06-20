@@ -8,6 +8,8 @@ use App\Model\Document as document;
 
 use App\Model\document_tracking as document_tracking;
 
+use App\user as users;
+
 class request_document extends Model
 {
     
@@ -16,9 +18,13 @@ class request_document extends Model
 	protected $fillable = [
 
 		'request_no',
+
 		'document_no',
+
 		'receiver',
+
 		'soft_delete',
+		
 		'status'
 
 	];
@@ -29,6 +35,13 @@ class request_document extends Model
 	{
 
 		return $this->hasMany( document::class , 'document_no' , 'document_no');
+
+	}
+
+	public function get_category()
+	{
+
+		return $this->hasOne( document::class, 'document_no', 'document_no' );
 
 	}
 
@@ -43,6 +56,13 @@ class request_document extends Model
 	{
 
 		return $this->belongsTo( document_tracking::class, 'request_no', 'request_no' );
+
+	}
+
+	public function users()
+	{
+
+		return $this->hasOne( users::class, 'user_id' , 'user_id' );
 
 	}
     

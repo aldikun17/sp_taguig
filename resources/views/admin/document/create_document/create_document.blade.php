@@ -80,7 +80,7 @@
 
 									@foreach($category_document as $cat_document)
 
-										<option value="{{$cat_document->document_no}}">{{$cat_document->document_category}}</option>
+										<option value="{{$cat_document->document_no}}">{{ucwords($cat_document->document_category)}}</option>
 
 									@endforeach
 								

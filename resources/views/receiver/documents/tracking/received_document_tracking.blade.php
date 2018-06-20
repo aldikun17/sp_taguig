@@ -159,7 +159,7 @@
 							      		
 							      		<label> Tracking # </label>
 
-							      		<input type="text" class="form-control" name="tracking_id" value="{{$tracking->tracking_id}}">
+							      		<input type="text" class="form-control" name="tracking_id" value="{{$tracking->tracking_id}}" readonly>
 
 							      	</div>
 
@@ -167,7 +167,7 @@
 							      		
 							      		<label> Request # </label>
 
-							      		<input type="text" class="form-control" value="{{$tracking->request_no}}">
+							      		<input type="text" class="form-control" value="{{$tracking->request_no}}" readonly>
 
 							      	</div>
 
@@ -226,7 +226,6 @@
 							      </div>
 
 							      <div class="modal-body">
-
 							      	
 							      	<div id="accept_document_success_{{$tracking->request_no}}" class="alert alert-success alert-dismissible" role="alert" style="display: none">
 
@@ -255,7 +254,7 @@
 							      		
 							      		<label> Tracking # </label>
 
-							      		<input type="text" class="form-control" name="tracking_id" value="{{$tracking->tracking_id}}">
+							      		<input type="text" class="form-control" name="tracking_id" value="{{$tracking->tracking_id}}" readonly>
 
 							      	</div>
 
@@ -263,17 +262,35 @@
 							      		
 							      		<label> Request # </label>
 
-							      		<input type="text" class="form-control" value="{{$tracking->request_no}}">
+							      		<input type="text" class="form-control" value="{{$tracking->request_no}}" readonly>
 
 							      	</div>
 
-							      	<div class="form-group">
+							      	@if(!empty($tracking::find($tracking->id)->request_document->users))
+
+							      		<div class="form-group">
 							      		
-							      		<label> Person Received </label>
+								      		<label> Person Received </label>
 
-							      		<input type="text" name="person_received" class="form-control">
+								      		<input type="text" name="person_received" class="form-control" value="{{$tracking::find($tracking->id)->request_document->users->name}}">
 
-							      	</div>
+								      		<input type="hidden" name="user_id" value="{{$tracking::find($tracking->id)->request_document->users->user_id}}">
+
+								      	</div>
+
+							      	@else
+
+							      		<div class="form-group">
+							      		
+								      		<label> Person Received </label>
+
+								      		<input type="text" name="person_received" class="form-control">
+
+								      	</div>
+
+							      	@endif
+
+							      	
 
 							      	<div class="form-group">
 							      		
@@ -373,7 +390,7 @@
 
 															    	<label class="pull-right">
 
-															    		{{$received_documents::find($received_documents->id)->document_tracking->request_document->documents->last()->category_documents->document_category}}
+															    		{{ucwords($received_documents::find($received_documents->id)->document_tracking->request_document->documents->last()->category_documents->document_category)}}
 															      				
 															    	</label>
 

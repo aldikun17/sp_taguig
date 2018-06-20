@@ -12,7 +12,9 @@ use App\Model\document_tracking as document_tracking;
 
 use App\Model\received_document as received_document;
 
-use App\Model\request_document as request_document;
+use App\Model\request_document  as request_document;
+
+use App\Model\user_notification as user_notification;
 
 class ReceiveRequestedDocumentController extends Controller
 {
@@ -23,7 +25,7 @@ class ReceiveRequestedDocumentController extends Controller
 		$receive_document = Validator::make($request->all(),[
 
 
-			'person_received'   => 'required|min:14|max:64',
+			'person_received'   => 'required|min:10|max:64',
 
 			'reason_requesting' => 'required|min:10|max:64'
 
@@ -55,10 +57,6 @@ class ReceiveRequestedDocumentController extends Controller
 
 		}
 
-			
-
-			
-
 	}
 
 	public function update_tracking($request,$request_no)
@@ -84,13 +82,29 @@ class ReceiveRequestedDocumentController extends Controller
 
 		$tracking_count = $tracking_id + 1;
 
-		if(!empty($tracking_id)){
 
 			$receive_document = new received_document;
 
 			$receive_document->tracking_id 		 = $request['tracking_id'];
 
-			$receive_document->count_tracking	 = $tracking_count;
+			if(!empty($tracking_id)){
+
+				$receive_document->count_tracking	 = $tracking_count;		
+
+			}	else {
+
+				$receive_document->count_tracking	 = 1;		
+
+			}
+
+			if(!empty($request['user_id']))
+			{
+
+				$receive_document->user_id           = $request['user_id'];
+
+				$receive_document->person_received   = $request['person_received'];
+
+			}
 
 			$receive_document->person_received   = $request['person_received'];
 
@@ -99,27 +113,6 @@ class ReceiveRequestedDocumentController extends Controller
 			$receive_document->status 			 = 0;
 
 			$receive_document->save();
-
-		}	else {
-
-			$receive_document = new received_document;
-
-			$receive_document->tracking_id 		 = $request['tracking_id'];
-
-			$receive_document->count_tracking	 = 1;
-
-			$receive_document->person_received   = $request['person_received'];
-
-			$receive_document->reason_requesting = $request['reason_requesting'];
-
-			$receive_document->status 			 = 0;
-
-			$receive_document->save();
-
-			
-
-		}
-
 
 		return Response::json([
 
@@ -152,16 +145,31 @@ class ReceiveRequestedDocumentController extends Controller
 		$received_document = received_document::where('tracking_id',$document_tracking->tracking_id)
 											  ->where('count_tracking',$count)->first();
 
-
 		$approved_received_document = received_document::find($received_document->id);
 
 		$approved_received_document->status = 1;
 
 		$approved_received_document->save();
 
-		return back()->with('approved_success','Document Received with tracking # of '. $received_document->tracking_id);
+		return $this->addNotification($received_document);
 
 	}
 
+	public function addNotification($received)
+	{
+
+		$user_notification = new user_notification;
+
+		$user_notification->user_id 	= $received->user_id;
+
+		$user_notification->tracking_id = $received->tracking_id;
+
+		$user_notification->message     = 'My Request has been approved';
+
+		$user_notification->status      = 1;
+
+		$user_notification->save();
+
+	}
 
 }

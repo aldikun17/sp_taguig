@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="{{asset('admin/css/skins/_all-skins.min.css')}}">
   <!-- Morris chart -->
   <link rel="stylesheet" href="{{asset('admin/css/morris/morris.css')}}">
+  <!-- icheck -->
+  <link rel="stylesheet" href="{{asset('admin/css/icheck/all.css')}}">
   <!-- jvectormap -->
   <link rel="stylesheet" href="{{asset('admin/css/jvectormap/jquery-jvectormap.css')}}">
   <!-- Date Picker -->
@@ -66,6 +68,8 @@
 <script src="{{asset('admin/js/jvectormap/jvectormap_world.js')}}"></script>
 <!-- jQuery Knob Chart -->
 <script src="{{asset('admin/js/knob/jquery.knob.min.js')}}"></script>
+<!-- icheck -->
+<script src="{{asset('admin/js/icheck/icheck.min.js')}}"></script>
 <!-- daterangepicker -->
 <script src="{{asset('admin/js/moment/moment.min.js')}}"></script>
 <script src="{{asset('admin/js/daterange/daterangepicker.js')}}"></script>

@@ -14,12 +14,19 @@ class document extends Model
 	protected $table = 'documents';
 
 	protected $fillable =  [
+
 		'document_category_id',
+
 		'document_no',
+
 		'office',
+
 		'name',
+
 		'document_content',
+
 		'soft_delete'
+		
 	];
 
 	protected $hidden = [	'id'	];
@@ -35,6 +42,13 @@ class document extends Model
 	{
 
 		return $this->belongsTo(request_document::class, 'document_no' , 'document_no');
+
+	}
+
+	public function get_single_request()
+	{
+
+		return $this->belongsTo( request_document::class, 'document_no', 'document_category_id' );
 
 	}
 

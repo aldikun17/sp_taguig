@@ -150,7 +150,7 @@ $(document).ready(function(){
 						
 								<td style="background: red">{{$documents->document_no}}</td>
 
-								<td style="background: red">{{$documents->document_category}}</td>
+								<td style="background: red">{{ucwords($documents->document_category)}}</td>
 
 								<td style="background: red">
 
@@ -162,7 +162,7 @@ $(document).ready(function(){
 
 								<td>{{$documents->document_no}}</td>
 
-								<td>{{$documents->document_category}}</td>
+								<td>{{ucwords($documents->document_category)}}</td>
 
 								<td>
 										

@@ -14,12 +14,21 @@ class CreateRequestForDelivery extends Migration
     public function up()
     {
         Schema::create('request_documents',function(Blueprint $table){
+
             $table->increments('id');
-            $table->string('request_no',20);
+
+            $table->string('request_no',20)->nullable();
+
+            $table->string('user_id',20)->nullable();
+
             $table->string('document_no',20);
+
             $table->string('receiver',64);
+
             $table->boolean('status');
+
             $table->boolean('soft_delete');
+
             $table->timestamps();
         });
     }

@@ -8,6 +8,10 @@ use App\Model\Category_Document;
 
 use App\Model\Document;
 
+use App\Model\request_document as request_document;
+
+use App\user as users;
+
 use Validator;
 
 use Response;
@@ -71,29 +75,29 @@ class AdminDocumentController extends Controller
 
 		$document_category = Category_Document::where('document_no',$request['document_category_id'])->first();
 
-		$document_path = storage_path('app/public').'\documents/'.$document_category->document_category.'/'.$request['document_no'].'/';
+		$document_path = storage_path('app/public/documents').'/'.$document_category->document_category.'/'.$request['document_no'].'/';
 
 		$request['document_name']->move( $document_path , $request['document_name']->getClientOriginalName());
 
-			$create_document = new Document;
+				$create_document = new Document;
 
-			$create_document->document_category_id = $request['document_category_id'];
+				$create_document->document_category_id = $request['document_category_id'];
 
-			$create_document->document_no 		   = $request['document_no'];
+				$create_document->document_no 		   = $request['document_no'];
 
-			$create_document->office 			   = $request['office'];
+				$create_document->office 			   = $request['office'];
 
-			$create_document->name 				   = $request['name'];
+				$create_document->name 				   = $request['name'];
 
-			$create_document->document_path		   = $request['document_name']->getClientOriginalName();
+				$create_document->document_path		   = $request['document_name']->getClientOriginalName();
 
-			$create_document->soft_delete 		   = 1;
+				$create_document->soft_delete 		   = 1;
 
-			$create_document->document_content 	   = $request['document_content'];
+				$create_document->document_content 	   = $request['document_content'];
 
-			$create_document->save();
+				$create_document->save();
 
-			return back()->with('document_create_success','Document Successfully Created');
+				return back()->with('document_create_success','Document Successfully Created');
 
 	}
 
@@ -158,6 +162,33 @@ class AdminDocumentController extends Controller
 		return back()->with('document_success','You Successfully Recover '. $documents->document_content);
 
 	}
+
+	public function update_user_request($user_id, Request $request)
+	{
+
+		$user_request = request_document::where('user_id',$user_id)
+										->where('request_no',null)
+										->get();
+
+		$user = users::where('user_id',$user_id)->first();
+
+
+		foreach($user_request as $request_user):
+
+			$user_requests = request_document::find($request_user->id);
+
+			$user_requests->request_no = $request['request_no'];
+
+			$user_requests->status = 1;			
+
+			$user_requests->save();
+
+		endforeach;
+
+		return redirect('admin/request/document')->with('update_request',ucwords($user->name) .' successfully updated document requested');
+
+	}
+
 
 
 }

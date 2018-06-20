@@ -14,6 +14,12 @@ use App\Model\document_tracking as document_tracking;
 
 use App\Model\received_document as received_document;
 
+use App\user as users;
+
+use Storage;
+
+use Auth;
+
 class AdminViewController extends Controller
 {
     
@@ -101,8 +107,35 @@ class AdminViewController extends Controller
 
 		$request_documents  = request_document::where('request_no',$request_no)->first();
 
-		return view('admin.document_request.update_document_request', compact( 'request_no' , 'request_document', 'document_category', 'request_documents' ) );
+		$document_categories = $request_documents->get_category->category_documents->document_category;
 
+		$url = Storage::url('app/public/documents/'.$document_categories.'/'.$request_documents['document_no'].'/');
+
+		return view('admin.document_request.update_document_request', compact( 'request_no' , 'request_document', 'document_category', 'request_documents', 'url' ) );
+
+	}
+
+	public function update_user_request($user_id)
+	{
+
+		$user_request  = request_document::where('user_id',$user_id)
+										 ->where('request_no',null)
+										 ->orderBy('created_at')
+										 ->groupBy('user_id')
+										 ->first();
+
+		$user_requests = request_document::where('user_id',$user_id)
+										->where('request_no',null)
+										->orderBy('created_at')
+										->get();
+
+		$document_categories = $user_request->get_category->category_documents->document_category;
+
+		$url = Storage::url('app/public/documents/'.$document_categories);
+
+		$users = users::where('user_id',$user_id)->first();
+
+		return view('admin.document_request.user_request.user_request' , compact(  'user_requests' , 'users' , 'url' ));
 
 	}
 

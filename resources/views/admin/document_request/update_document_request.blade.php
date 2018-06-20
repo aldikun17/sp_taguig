@@ -109,14 +109,13 @@
 
 			                	@foreach($request_document as $update_request)
 
-			                		@foreach($update_request::find($update_request->id)->document as $document)
+			                		@foreach($update_request::find($update_request->id)->documents as $document)
+										<li>
+											
+											<iframe src="{{storage::url('documents/'.$document->category_documents->document_category.'/'.$update_request->document_no.'/'.$document->document_path)}}" width="70%" height="100%">
+											</iframe><br>
 
-			                			<li>
-			                				<object data="{{storage_path('documents').'/'.$document->category_documents->document_category.'/'.$update_request->document_no.'/'.$document->document_path}}" type="application/pdf" width="100%" height="100%">
-										  	<p> Your web browser doesn't have a PDF plugin.
-										  		Instead you can <a href="filename.pdf">click here to
-										  		download the PDF file.</a></p>
-											</object>
+											<a href="{{storage::url('documents/'.$document->category_documents->document_category.'/'.$update_request->document_no.'/'.$document->document_path)}}">{{$document->document_path}}</a>
 										</li>
 
 			                		@endforeach

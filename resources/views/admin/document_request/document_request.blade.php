@@ -20,6 +20,22 @@
 
 		<div class="box-body">
 
+			@if(Session('update_request'))
+
+				<div class="box-header with-border">
+					
+					<div class="alert alert-success alert-dismissible" role="alert">
+
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+						{{Session('update_request')}}
+						
+					</div>
+
+				</div>
+
+			@endif
+
 			@if(Session('document_success'))
 
 				<div class="box-header with-border">
@@ -115,9 +131,35 @@
 
 								@if($request->status == 0)
 
-									<a  data-toggle="modal" data-target="#myModal_{{$request->request_no}}" class="btn btn-success btn-xs"><span class="fa fa-check"></span></a>
-									<a href="{{Url('admin/request/update/'.$request->request_no)}}" class="btn btn-primary btn-xs"><span class="fa fa-edit"></span></a>
-									<a href="{{url('request/document/delete/'.$request->request_no)}}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to temporarily delete this item')" ><span class="fa fa-remove"></span></a>
+									<a  data-toggle="modal" data-target="#myModal_{{$request->request_no}}" class="btn btn-success btn-xs">
+
+										<span class="fa fa-check"></span>
+
+									</a>
+
+									@if(empty($request->request_no))
+
+										<a href="{{Url('admin/request/user/'.$request->user_id)}}" class="btn btn-primary btn-xs">
+
+											<span class="fa fa-edit"></span>
+
+										</a>
+
+									@else
+
+										<a href="{{Url('admin/request/update/'.$request->request_no)}}" class="btn btn-primary btn-xs">
+
+											<span class="fa fa-edit"></span>
+
+										</a>
+
+									@endif
+
+									<a href="{{url('request/document/delete/'.$request->request_no)}}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to temporarily delete this item')" >
+
+										<span class="fa fa-remove"></span>
+
+									</a>
 
 								@else
 
@@ -179,17 +221,36 @@
 							      		
 							      	</div>
 
-							      	<div class="form-group">
+							      	@if(!empty($request::find($request->id)->document_tracking))
 
 							      		<div class="form-group">
-							      			
-							      			<label> Tracking # </label>
 
-							      				<input type="text" name="tracking_id" class="form-control" id="tracking_no_{{$request->request_no}}"  data-inputmask='"mask": "tr_#{{$year}}-{{$month}}-99999"' data-mask class="" >
+								      		<div class="form-group">
+								      			
+								      			<label> Tracking # </label>
 
-							      		</div>
-							      		
-							      	</div>
+								      				<input type="text" name="tracking_id" class="form-control" id="tracking_no_{{$request->request_no}}"  data-inputmask='"mask": "tr_#{{$year}}-{{$month}}-99999"' data-mask class=""
+								      				value="{{$request::find($request->id)->document_tracking->tracking_id}}" readonly>
+
+								      		</div>
+								      		
+								      	</div>
+
+								    @else
+
+								    	<div class="form-group">
+
+								      		<div class="form-group">
+								      			
+								      			<label> Tracking # </label>
+
+								      				<input type="text" name="tracking_id" class="form-control" id="tracking_no_{{$request->request_no}}"  data-inputmask='"mask": "tr_#{{$year}}-{{$month}}-99999"' data-mask class="" >
+
+								      		</div>
+								      		
+								      	</div>
+
+							      	@endif
 
 							      	<div class="form-group">
 
@@ -246,9 +307,15 @@
 
 						      </div>
 
+						      @if(empty($request::find($request->id)->document_tracking))
+
 						      <div class="modal-footer">
+
 						        <button type="submit" class="btn btn-primary">Save changes</button>
+
 						      </div>
+
+						      @endif
 
 						    </div>
 

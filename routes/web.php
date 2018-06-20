@@ -27,6 +27,8 @@ Route::get('/','WebController@index');
 
 	Route::get('document/{file}','AdminDocumentController@document_download')->name('document/application');
 
+	//Route::get('preview')
+
 
 
 //End Filter
@@ -51,7 +53,7 @@ Route::middleware(['admin'])->group(function(){
 
 	Route::get('admin/dashboard','AdminViewController@admin_view')->name('admin/dashboard');
 
-	Route::get('admin/request/update/{id}','AdminViewController@update_request');
+	Route::get('admin/request/update/{id?}','AdminViewController@update_request');
 
 	//End Views Controller
 
@@ -85,6 +87,7 @@ Route::middleware(['admin'])->group(function(){
 
 	//Request Documents Store Update Ajax Get
 
+
 	Route::post('admin/document/request/validate','DocumentRequestController@validate_request_document')->name('request/document');
 
 	Route::get('admin/request/approved','DocumentRequestController@document_approved')->name('document/request/approved');
@@ -106,6 +109,17 @@ Route::middleware(['admin'])->group(function(){
 	Route::post('admin/document/request/tracking/{id}','DocumentTrackingController@document_tracking_validate');
 
 	//End Tracking
+
+	Route::get('storage/app/public/documents/{any}/{id}','AdminDocumentController@display_pdf');
+
+	//User Request
+
+	Route::get('admin/request/user/{id}','AdminViewController@update_user_request');
+
+	Route::post('admin/user/document/request/{id}','AdminDocumentController@update_user_request');
+
+
+	//End User Request
 
 });
 
@@ -144,7 +158,15 @@ Route::middleware(['user'])->group(function(){
 
 	Route::get('user/documents','user\UserViewController@documents')->name('user/documents');
 
-	
+	Route::get('documents/user/{cat_id}/{filter?}','user\UserViewController@getCategories');
+
+	Route::post('user/request/document','user\UserDocumentRequestController@request_document')->name('user/request/document');
+
+	Route::get('user/document/downloads/{user_id}/{doc_id}','user\UserDocumentRequestController@user_document_download');
+
+	Route::get('user/notification/{user_id}','user\UserViewController@update_Notification');
+
+
 
 });
 

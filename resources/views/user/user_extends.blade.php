@@ -20,43 +20,38 @@
           <!-- Messages: style can be found in dropdown.less-->
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notification_click">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              @if(!empty(Auth::user()->myNotification->where('user_id',Auth::user()->user_id)->where('status',1)->count()))
+                <span class="label label-warning">
+                  
+                    {{Auth::user()->myNotification->where('user_id',Auth::user()->user_id)->where('status',1)->count()}}
+                
+                </span>
+              @endif
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">You have  notifications</li>
               <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
-                </ul>
+                  
+                  <ul class="menu">       
+
+                   @foreach(Auth::user()->myNotification as $notification)
+
+                    <li>
+                      <a href="#">
+                        <i class="fa fa-warning text-yellow"></i>
+                        {{$notification->message}}
+
+                      </a>
+                    </li>
+
+                   @endforeach
+
+                  </ul>
+                
               </li>
+
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li>
@@ -189,5 +184,25 @@
   </div>	
 
 
+<script type="text/javascript">
+  
+  $('#notification_click').click(function(){
 
+    $.ajax({
+
+      type: 'GET',
+
+      dataType: 'json',
+
+      url: "{{url('user/notification/'.Auth::user()->user_id)}}",
+
+      success:function(response){
+
+      }
+
+    });
+
+  });
+
+</script>
 @include('user.includes.footer.footer')

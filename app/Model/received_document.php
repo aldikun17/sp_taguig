@@ -13,6 +13,8 @@ class received_document extends Model
 
 	protected $fillable	= [
 
+		'user_id',
+
 		'tracking_id',
 
 		'count_tracking',
